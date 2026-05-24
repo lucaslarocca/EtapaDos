@@ -66,6 +66,9 @@ desktop.ini
 .AppleDouble
 .LSOverride
 
+# ==================== Documentación local ====================
+docs/
+
 # ==================== Misceláneos ====================
 
 # Variables de entorno
