@@ -1,0 +1,697 @@
+{
+  "info": {
+    "_postman_id": "b4dadafe-d5c0-4dee-909b-8304ffed3a1d",
+    "name": "APIS Tpo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33317883"
+  },
+  "item": [
+    {
+      "name": "get bearer",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gestores Crear",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"Carlos Pérez\",\r\n  \"email\": \"carlos.perez@uade.edu.ar\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/gestores",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "gestores"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gestores Mostrar todos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/gestores",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "gestores"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gestores Buscar por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/gestores/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "gestores",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gestores Actualizar",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"María López Actualizada\",\r\n  \"email\": \"maria.lopez@uade.edu.ar\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/gestores/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "gestores",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gestores Eliminar",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/gestores/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "gestores",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Clientes Crear",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"dni\": \"30111222\",\r\n  \"nombre\": \"Juan García\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/clientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "clientes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creditos Crear",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"dniCliente\": \"30111222\",\r\n  \"deudaOriginal\": 50000,\r\n  \"fecha\": \"2026-01-01\",\r\n  \"importeCuota\": 5000,\r\n  \"cantidadCuotas\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/creditos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "creditos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mora para Credito",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"idCredito\": 1,\r\n  \"motivo\": \"Cliente no realizó el pago de las últimas 3 cuotas\",\r\n  \"observaciones\": \"Se intentó contactar sin éxito\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/moras",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mora Listar todas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mora buscar por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras del credito",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/credito/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "credito",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras listar por DNI",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/cliente/30111222",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "cliente",
+            "30111222"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras listar Pendientes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/estado/PENDIENTE",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "estado",
+            "PENDIENTE"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras listar En Gestion",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/estado/PENDIENTE",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "estado",
+            "PENDIENTE"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras listar Regularizadas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/estado/PENDIENTE",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "estado",
+            "PENDIENTE"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras asignar gestor",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"idGestor\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/moras/1/gestor",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "1",
+            "gestor"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras listar asignadas a gestor",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/moras/gestor/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "gestor",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras actualizar estado a Regularizada",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"estado\": \"REGULARIZADA\",\r\n  \"observaciones\": \"El cliente regularizó el pago completo el 10/04/2026\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/moras/1/estado",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras actualizar estado a Incobrable",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"estado\": \"INCOBRABLE\",\r\n  \"observaciones\": \"No se pudo recuperar la deuda. Se envía a legal.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/moras/1/estado",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Moras eliminar",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{Bearer}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/moras/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "moras",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "Bearer",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

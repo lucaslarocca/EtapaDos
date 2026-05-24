@@ -1,0 +1,208 @@
+### ── AUTENTICACIÓN ──────────────────────────────────────────────────────────
+
+### 1. Registrar usuario
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 2. Login (guardar el token)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+# Copiar el valor de "token" en la variable @token de abajo
+@token = PEGAR_TOKEN_AQUI
+
+
+### ── GESTORES ────────────────────────────────────────────────────────────────
+
+### 3. Crear gestor
+POST http://localhost:8080/api/gestores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "María López",
+  "email": "maria.lopez@uade.edu.ar"
+}
+
+### 4. Crear segundo gestor
+POST http://localhost:8080/api/gestores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Carlos Pérez",
+  "email": "carlos.perez@uade.edu.ar"
+}
+
+### 5. Listar todos los gestores
+GET http://localhost:8080/api/gestores
+Authorization: Bearer {{token}}
+
+### 6. Buscar gestor por ID
+GET http://localhost:8080/api/gestores/1
+Authorization: Bearer {{token}}
+
+### 7. Actualizar gestor
+PUT http://localhost:8080/api/gestores/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "María López Actualizada",
+  "email": "maria.lopez@uade.edu.ar"
+}
+
+### 8. Eliminar gestor (solo si no tiene moras asignadas)
+DELETE http://localhost:8080/api/gestores/2
+Authorization: Bearer {{token}}
+
+
+### ── PRERREQUISITOS: crear cliente y crédito ─────────────────────────────────
+
+### 9. Crear cliente
+POST http://localhost:8080/api/clientes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "dni": "30111222",
+  "nombre": "Juan García"
+}
+
+### 10. Crear crédito para ese cliente
+POST http://localhost:8080/api/creditos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "dniCliente": "30111222",
+  "deudaOriginal": 50000,
+  "fecha": "2026-01-01",
+  "importeCuota": 5000,
+  "cantidadCuotas": 10
+}
+
+
+### ── MORAS ───────────────────────────────────────────────────────────────────
+
+### 11. Registrar mora para el crédito 1
+POST http://localhost:8080/api/moras
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idCredito": 1,
+  "motivo": "Cliente no realizó el pago de las últimas 3 cuotas",
+  "observaciones": "Se intentó contactar sin éxito"
+}
+
+### 12. Intentar registrar mora duplicada (debe fallar con 400)
+POST http://localhost:8080/api/moras
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idCredito": 1,
+  "motivo": "Segundo intento de mora",
+  "observaciones": ""
+}
+
+### 13. Listar todas las moras
+GET http://localhost:8080/api/moras
+Authorization: Bearer {{token}}
+
+### 14. Buscar mora por ID
+GET http://localhost:8080/api/moras/1
+Authorization: Bearer {{token}}
+
+### 15. Listar moras del crédito 1
+GET http://localhost:8080/api/moras/credito/1
+Authorization: Bearer {{token}}
+
+### 16. Listar moras del cliente por DNI
+GET http://localhost:8080/api/moras/cliente/30111222
+Authorization: Bearer {{token}}
+
+### 17. Reporte: moras en estado PENDIENTE
+GET http://localhost:8080/api/moras/estado/PENDIENTE
+Authorization: Bearer {{token}}
+
+### 18. Reporte: moras en estado EN_GESTION
+GET http://localhost:8080/api/moras/estado/EN_GESTION
+Authorization: Bearer {{token}}
+
+### 19. Reporte: moras REGULARIZADAS
+GET http://localhost:8080/api/moras/estado/REGULARIZADA
+Authorization: Bearer {{token}}
+
+### 20. Asignar gestor a la mora 1 (pasa a EN_GESTION automáticamente)
+PUT http://localhost:8080/api/moras/1/gestor
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idGestor": 1
+}
+
+### 21. Listar moras del gestor 1
+GET http://localhost:8080/api/moras/gestor/1
+Authorization: Bearer {{token}}
+
+### 22. Actualizar estado de mora a REGULARIZADA
+PUT http://localhost:8080/api/moras/1/estado
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "estado": "REGULARIZADA",
+  "observaciones": "El cliente regularizó el pago completo el 10/04/2026"
+}
+
+### 23. Intentar modificar una mora ya REGULARIZADA (debe fallar con 400)
+PUT http://localhost:8080/api/moras/1/estado
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "estado": "PENDIENTE",
+  "observaciones": ""
+}
+
+### 24. Actualizar estado a INCOBRABLE
+PUT http://localhost:8080/api/moras/1/estado
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "estado": "INCOBRABLE",
+  "observaciones": "No se pudo recuperar la deuda. Se envía a legal."
+}
+
+### 25. Eliminar mora en PENDIENTE (crear una nueva primero)
+POST http://localhost:8080/api/moras
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idCredito": 1,
+  "motivo": "Mora de prueba para eliminar",
+  "observaciones": ""
+}
+
+### 26. Eliminar la mora recién creada (id 2)
+DELETE http://localhost:8080/api/moras/2
+Authorization: Bearer {{token}}
+
+### 27. Intentar eliminar mora EN_GESTION (debe fallar con 400)
+DELETE http://localhost:8080/api/moras/1
+Authorization: Bearer {{token}}
