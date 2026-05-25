@@ -9,6 +9,12 @@
 #
 # Uso:
 #   .\scripts\seed-datos.ps1
+#
+# Si aparece el error "la ejecucion de scripts esta deshabilitada":
+#   Opcion A (una sola vez, sin cambios permanentes):
+#     powershell -ExecutionPolicy Bypass -File .\scripts\seed-datos.ps1
+#   Opcion B (habilitar para tu usuario de forma permanente):
+#     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 # =============================================================================
 
 $BASE = "http://localhost:8080/api"
