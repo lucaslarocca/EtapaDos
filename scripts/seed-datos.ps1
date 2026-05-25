@@ -143,7 +143,7 @@ Write-Host "=============================================" -ForegroundColor Gree
 Write-Host ""
 Write-Host "  Usuario   : admin  /  contrasena: 1234"
 Write-Host "  Cliente   : Ana Lopez  (DNI 12345678)"
-Write-Host "  Credito   : ID 1  —  $50.000 en 10 cuotas de $5.000"
+Write-Host "  Credito   : ID 1  --  `$50.000 en 10 cuotas de `$5.000"
 Write-Host "  Gestor 1  : Juan Perez   (ID 1)  juan@mail.com"
 Write-Host "  Gestor 2  : Maria Garcia (ID 2)  maria@mail.com"
 Write-Host "  Mora      : ID 1  —  PENDIENTE  —  Credito #1"
