@@ -35,6 +35,10 @@ frontend/.env.*.local
 frontend-output.log
 frontend-error.log
 
+# ==================== Claude Code ====================
+
+.claude/
+
 # ==================== IDEs y editores ====================
 
 # IntelliJ IDEA
