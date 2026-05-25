@@ -20,6 +20,8 @@ export default function Navbar() {
           <Link to="/clientes"  style={styles.link}>Clientes</Link>
           <Link to="/creditos"  style={styles.link}>Créditos</Link>
           <Link to="/cobranzas" style={styles.link}>Cobranzas</Link>
+          <Link to="/gestores"  style={styles.link}>Gestores</Link>
+          <Link to="/moras"     style={styles.link}>Moras</Link>
           <span style={styles.user}>👤 {user.username}</span>
           <button onClick={handleLogout} style={styles.btn}>Salir</button>
         </div>
