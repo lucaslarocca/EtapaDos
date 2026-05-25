@@ -54,24 +54,27 @@ Write-Step "Paso 1/5 -- Autenticacion"
 
 $authBody = @{ username = "admin"; password = "1234" } | ConvertTo-Json
 
+# Intentamos login primero. Si el usuario no existe aun, lo registramos.
 try {
-    $auth = Invoke-RestMethod -Uri "$BASE/auth/register" `
+    $auth = Invoke-RestMethod -Uri "$BASE/auth/login" `
         -Method POST -ContentType "application/json" -Body $authBody
-    Write-Ok "Usuario 'admin' registrado correctamente."
+    Write-Ok "Login exitoso con usuario existente."
 } catch {
     $status = $_.Exception.Response.StatusCode.value__
-    if ($status -eq 400 -or $status -eq 409 -or $status -eq 500) {
-        Write-Warn "El usuario ya existe en esta sesion. Haciendo login..."
+    if ($status -eq 401 -or $status -eq 400) {
+        # El usuario no existe todavia -> lo registramos
+        Write-Warn "Usuario no encontrado. Registrando..."
         try {
-            $auth = Invoke-RestMethod -Uri "$BASE/auth/login" `
+            $auth = Invoke-RestMethod -Uri "$BASE/auth/register" `
                 -Method POST -ContentType "application/json" -Body $authBody
-            Write-Ok "Login exitoso."
+            Write-Ok "Usuario 'admin' registrado correctamente."
         } catch {
-            Write-Fail "Credenciales incorrectas o error inesperado: $($_.Exception.Message)"
+            Write-Fail "No se pudo registrar el usuario: $($_.Exception.Message)"
+            Write-Fail "Si el error es 'usuario ya existe', reiniciar el backend para limpiar la BD."
             exit 1
         }
     } else {
-        Write-Fail "Error inesperado al registrar: $($_.Exception.Message)"
+        Write-Fail "Error al autenticar (status $status): $($_.Exception.Message)"
         exit 1
     }
 }
