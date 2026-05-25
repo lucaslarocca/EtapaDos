@@ -52,7 +52,7 @@ try {
 # =============================================================================
 Write-Step "Paso 1/5 -- Autenticacion"
 
-$authBody = @{ username = "admin"; password = "1234" } | ConvertTo-Json
+$authBody = @{ username = "admin"; password = "admin123" } | ConvertTo-Json
 
 # Intentamos login primero. Si el usuario no existe aun, lo registramos.
 try {
@@ -168,7 +168,7 @@ Write-Host "=============================================" -ForegroundColor Gree
 Write-Host "  Datos cargados. Resumen:                 " -ForegroundColor Green
 Write-Host "=============================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "  Usuario   : admin  /  contrasena: 1234"
+Write-Host "  Usuario   : admin  /  contrasena: admin123"
 Write-Host "  Cliente   : Ana Lopez  (DNI 12345678)"
 Write-Host "  Credito   : ID 1  --  50000 en 10 cuotas de 5000"
 Write-Host "  Gestor 1  : Juan Perez   (ID 1)  juan@mail.com"
