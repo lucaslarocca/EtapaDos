@@ -19,20 +19,38 @@
 
 $BASE = "http://localhost:8080/api"
 
-function Write-Step { param($msg) Write-Host "`n>>> $msg" -ForegroundColor Cyan }
+function Write-Step { param($msg) Write-Host "" ; Write-Host ">>> $msg" -ForegroundColor Cyan }
 function Write-Ok   { param($msg) Write-Host "    OK  $msg" -ForegroundColor Green }
 function Write-Warn { param($msg) Write-Host "    >>  $msg" -ForegroundColor Yellow }
 function Write-Fail { param($msg) Write-Host "    ERR $msg" -ForegroundColor Red }
 
 Write-Host ""
 Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host "  Seed de datos de prueba — Etapa 2 UADE   " -ForegroundColor Cyan
+Write-Host "  Seed de datos de prueba - Etapa 2 UADE   " -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
+
+# =============================================================================
+# VERIFICAR QUE EL BACKEND ESTA CORRIENDO
+# =============================================================================
+Write-Step "Verificando conexion con el backend..."
+try {
+    Invoke-RestMethod -Uri "$BASE/auth/login" -Method POST -ContentType "application/json" `
+        -Body '{"username":"_ping_","password":"_ping_"}' -ErrorAction Stop | Out-Null
+} catch {
+    $status = $_.Exception.Response.StatusCode.value__
+    if ($null -eq $status) {
+        Write-Fail "No se puede conectar al backend en $BASE"
+        Write-Fail "Verificar que 'mvn spring-boot:run' este corriendo en la carpeta backend/"
+        exit 1
+    }
+    # Si llega respuesta (aunque sea 401/400), el backend esta activo
+    Write-Ok "Backend respondiendo en $BASE"
+}
 
 # =============================================================================
 # 1. AUTENTICACION
 # =============================================================================
-Write-Step "Paso 1/5 — Autenticacion"
+Write-Step "Paso 1/5 -- Autenticacion"
 
 $authBody = @{ username = "admin"; password = "1234" } | ConvertTo-Json
 
@@ -41,13 +59,19 @@ try {
         -Method POST -ContentType "application/json" -Body $authBody
     Write-Ok "Usuario 'admin' registrado correctamente."
 } catch {
-    Write-Warn "El usuario ya existe. Intentando login..."
-    try {
-        $auth = Invoke-RestMethod -Uri "$BASE/auth/login" `
-            -Method POST -ContentType "application/json" -Body $authBody
-        Write-Ok "Login exitoso."
-    } catch {
-        Write-Fail "No se pudo autenticar. Verificar que el backend esta corriendo en $BASE"
+    $status = $_.Exception.Response.StatusCode.value__
+    if ($status -eq 400 -or $status -eq 409 -or $status -eq 500) {
+        Write-Warn "El usuario ya existe en esta sesion. Haciendo login..."
+        try {
+            $auth = Invoke-RestMethod -Uri "$BASE/auth/login" `
+                -Method POST -ContentType "application/json" -Body $authBody
+            Write-Ok "Login exitoso."
+        } catch {
+            Write-Fail "Credenciales incorrectas o error inesperado: $($_.Exception.Message)"
+            exit 1
+        }
+    } else {
+        Write-Fail "Error inesperado al registrar: $($_.Exception.Message)"
         exit 1
     }
 }
@@ -59,7 +83,7 @@ Write-Ok "Token JWT obtenido."
 # =============================================================================
 # 2. CLIENTE
 # =============================================================================
-Write-Step "Paso 2/5 — Crear cliente"
+Write-Step "Paso 2/5 -- Crear cliente"
 
 try {
     $body    = @{ dni = "12345678"; nombre = "Ana Lopez" } | ConvertTo-Json
@@ -73,7 +97,7 @@ try {
 # =============================================================================
 # 3. CREDITO
 # =============================================================================
-Write-Step "Paso 3/5 — Crear credito"
+Write-Step "Paso 3/5 -- Crear credito"
 
 try {
     $body = @{
@@ -87,7 +111,7 @@ try {
     $credito = Invoke-RestMethod -Uri "$BASE/creditos" `
         -Method POST -ContentType "application/json" -Headers $headers -Body $body
 
-    Write-Ok "Credito creado  -> ID: $($credito.id)  Deuda: $$($credito.deudaOriginal)  Cuotas: $($credito.cantidadCuotas) x $$($credito.importeCuota)"
+    Write-Ok "Credito creado  -> ID: $($credito.id)  Deuda: $($credito.deudaOriginal)  Cuotas: $($credito.cantidadCuotas) x $($credito.importeCuota)"
 } catch {
     Write-Fail "Error al crear credito: $($_.Exception.Message)"
 }
@@ -95,7 +119,7 @@ try {
 # =============================================================================
 # 4. GESTORES
 # =============================================================================
-Write-Step "Paso 4/5 — Crear gestores"
+Write-Step "Paso 4/5 -- Crear gestores"
 
 $gestores = @(
     @{ nombre = "Juan Perez";   email = "juan@mail.com"  },
@@ -104,8 +128,8 @@ $gestores = @(
 
 foreach ($g in $gestores) {
     try {
-        $body    = $g | ConvertTo-Json
-        $gestor  = Invoke-RestMethod -Uri "$BASE/gestores" `
+        $body   = $g | ConvertTo-Json
+        $gestor = Invoke-RestMethod -Uri "$BASE/gestores" `
             -Method POST -ContentType "application/json" -Headers $headers -Body $body
         Write-Ok "Gestor creado   -> ID: $($gestor.id)  Nombre: $($gestor.nombre)  Email: $($gestor.email)"
     } catch {
@@ -116,7 +140,7 @@ foreach ($g in $gestores) {
 # =============================================================================
 # 5. MORA
 # =============================================================================
-Write-Step "Paso 5/5 — Crear mora"
+Write-Step "Paso 5/5 -- Crear mora"
 
 try {
     $body = @{
@@ -143,10 +167,10 @@ Write-Host "=============================================" -ForegroundColor Gree
 Write-Host ""
 Write-Host "  Usuario   : admin  /  contrasena: 1234"
 Write-Host "  Cliente   : Ana Lopez  (DNI 12345678)"
-Write-Host "  Credito   : ID 1  --  `$50.000 en 10 cuotas de `$5.000"
+Write-Host "  Credito   : ID 1  --  50000 en 10 cuotas de 5000"
 Write-Host "  Gestor 1  : Juan Perez   (ID 1)  juan@mail.com"
 Write-Host "  Gestor 2  : Maria Garcia (ID 2)  maria@mail.com"
-Write-Host "  Mora      : ID 1  —  PENDIENTE  —  Credito #1"
+Write-Host "  Mora      : ID 1  --  PENDIENTE  --  Credito #1"
 Write-Host ""
 Write-Host "  Abrir la app en: http://localhost:5173" -ForegroundColor Yellow
 Write-Host ""
