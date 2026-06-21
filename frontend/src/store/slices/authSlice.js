@@ -20,7 +20,7 @@ export const registerThunk = createAsyncThunk('auth/register', async (data, { re
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user:    JSON.parse(localStorage.getItem('authUser')) ?? null,
+    user:    JSON.parse(localStorage.getItem('authUser') ?? 'null'),
     loading: false,
     error:   null,
   },

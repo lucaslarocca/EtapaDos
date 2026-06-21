@@ -1,6 +1,6 @@
 # TP Ejemplo — Aplicaciones Interactivas UADE
 
-Sistema de créditos y cobranzas desarrollado como ejemplo didáctico para la materia
+Sistema de créditos y cobranzas con módulo de **Gestión de Mora**, desarrollado para la materia
 **Aplicaciones Interactivas (3.4.082)** de la UADE.
 
 ---
@@ -20,6 +20,14 @@ Sistema de créditos y cobranzas desarrollado como ejemplo didáctico para la ma
 
 ---
 
+## Módulo elegido: Gestión de Mora
+
+Permite registrar créditos en mora, asignar gestores responsables y dar seguimiento al proceso de recuperación según su estado (`PENDIENTE` → `EN_GESTION` → `REGULARIZADA` / `INCOBRABLE`).
+
+> Documentación completa del módulo: [README-MORA.md](README-MORA.md)
+
+---
+
 ## Estructura del proyecto
 
 ```
@@ -27,30 +35,44 @@ tpejemplo/
 ├── backend/               → Proyecto Spring Boot (Maven)
 │   └── src/main/java/com/uade/tpejemplo/
 │       ├── config/        → SecurityConfig (JWT + stateless)
-│       ├── controller/    → AuthController, ClienteController, CreditoController, CobranzaController
+│       ├── controller/    → AuthController, ClienteController, CreditoController,
+│       │                     CobranzaController, GestorController, MoraController
 │       ├── dto/
-│       │   ├── request/   → ClienteRequest, CreditoRequest, CobranzaRequest, LoginRequest, RegisterRequest
-│       │   └── response/  → ClienteResponse, CreditoResponse, CuotaResponse, CobranzaResponse, AuthResponse
+│       │   ├── request/   → ClienteRequest, CreditoRequest, CobranzaRequest,
+│       │   │                 GestorRequest, MoraRequest, AsignacionGestorRequest,
+│       │   │                 ActualizarEstadoMoraRequest, LoginRequest, RegisterRequest
+│       │   └── response/  → ClienteResponse, CreditoResponse, CuotaResponse,
+│       │                     CobranzaResponse, GestorResponse, MoraResponse, AuthResponse
 │       ├── exception/     → ResourceNotFoundException, BusinessException, GlobalExceptionHandler
-│       ├── model/         → Cliente, Credito, Cuota, CuotaId, Cobranza, Usuario, Rol
-│       ├── repository/    → ClienteRepository, CreditoRepository, CuotaRepository, CobranzaRepository, UsuarioRepository
+│       ├── model/         → Cliente, Credito, Cuota, CuotaId, Cobranza, Gestor, Mora,
+│       │                     EstadoMora, Usuario, Rol
+│       ├── repository/    → ClienteRepository, CreditoRepository, CuotaRepository,
+│       │                     CobranzaRepository, GestorRepository, MoraRepository, UsuarioRepository
 │       ├── security/      → JwtUtil, JwtAuthFilter, UserDetailsServiceImpl
 │       └── service/
 │           ├── ClienteService / ClienteServiceImpl
 │           ├── CreditoService / CreditoServiceImpl
-│           └── CobranzaService / CobranzaServiceImpl
+│           ├── CobranzaService / CobranzaServiceImpl
+│           ├── GestorService / GestorServiceImpl
+│           └── MoraService / MoraServiceImpl
 └── frontend/              → Proyecto React + Vite
     └── src/
-        ├── api/           → apiClient.js, auth.js, clientes.js, creditos.js, cobranzas.js
+        ├── api/           → apiClient.js, auth.js, clientes.js, creditos.js,
+        │                     cobranzas.js, gestores.js, moras.js
         ├── components/    → Navbar.jsx, PrivateRoute.jsx
-        ├── store/
-        │   ├── index.js                  → configureStore (combina reducers)
-        │   └── slices/
-        │       ├── authSlice.js          → login/register thunks + logout
-        │       ├── clientesSlice.js      → fetchClientes + addCliente
-        │       ├── creditosSlice.js      → fetchCreditosPorCliente + addCredito
-        │       └── cobranzasSlice.js     → fetchCobranzasPorCredito + addCobranza
-        └── pages/         → Login.jsx, Register.jsx, Clientes.jsx, Creditos.jsx, Cobranzas.jsx
+        ├── pages/         → Login.jsx, Register.jsx, Clientes.jsx, Creditos.jsx,
+        │   │                 Cobranzas.jsx, Gestores.jsx, Moras.jsx
+        │   └── pages.css  → Estilos compartidos de todas las páginas
+        └── store/
+            ├── index.js                  → configureStore (combina reducers)
+            └── slices/
+                ├── authSlice.js          → login/register thunks + logout
+                ├── clientesSlice.js      → fetchClientes + addCliente
+                ├── creditosSlice.js      → fetchCreditosPorCliente + addCredito
+                ├── cobranzasSlice.js     → fetchCobranzasPorCredito + addCobranza
+                ├── gestoresSlice.js      → CRUD completo de gestores
+                └── morasSlice.js         → fetch (todas/filtros), add, asignar gestor,
+                                            cambiar estado, eliminar
 ```
 
 ---
@@ -88,6 +110,24 @@ tpejemplo/
 | id | Long (PK, auto) | Identificador |
 | cuota | FK → Cuota | Cuota que se está pagando |
 | importe | BigDecimal | Importe cobrado |
+
+### Gestor
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | Long (PK, auto) | Identificador |
+| nombre | String | Nombre completo del gestor |
+| email | String (único) | Email de contacto |
+
+### Mora
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | Long (PK, auto) | Identificador |
+| credito | FK → Credito | Crédito que entró en mora |
+| gestor | FK → Gestor (opt) | Gestor asignado (null si está PENDIENTE) |
+| fechaRegistro | LocalDate | Fecha de registro (automática) |
+| motivo | String | Descripción del motivo |
+| estado | EstadoMora | PENDIENTE / EN_GESTION / REGULARIZADA / INCOBRABLE |
+| observaciones | String (opt) | Notas de seguimiento |
 
 ### Usuario
 | Campo | Tipo | Descripción |
@@ -127,6 +167,29 @@ tpejemplo/
 | POST | `/api/cobranzas` | Registrar pago de una cuota |
 | GET | `/api/cobranzas/credito/{idCredito}` | Cobranzas de un crédito |
 
+### Gestores (requiere JWT)
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/api/gestores` | Crear gestor |
+| GET | `/api/gestores` | Listar todos |
+| GET | `/api/gestores/{id}` | Buscar por ID |
+| PUT | `/api/gestores/{id}` | Actualizar gestor |
+| DELETE | `/api/gestores/{id}` | Eliminar gestor |
+
+### Moras (requiere JWT)
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/api/moras` | Registrar mora (queda en PENDIENTE) |
+| GET | `/api/moras` | Listar todas |
+| GET | `/api/moras/{id}` | Buscar por ID |
+| GET | `/api/moras/credito/{idCredito}` | Moras de un crédito |
+| GET | `/api/moras/cliente/{dni}` | Moras de un cliente |
+| GET | `/api/moras/estado/{estado}` | Reporte por estado |
+| GET | `/api/moras/gestor/{idGestor}` | Moras asignadas a un gestor |
+| PUT | `/api/moras/{id}/gestor` | Asignar gestor (pasa a EN_GESTION) |
+| PUT | `/api/moras/{id}/estado` | Actualizar estado y observaciones |
+| DELETE | `/api/moras/{id}` | Eliminar (solo si está en PENDIENTE) |
+
 ---
 
 ## Seguridad JWT
@@ -143,6 +206,7 @@ El flujo de autenticación es:
 - Expiración: 24 horas
 - Sesión stateless (sin HttpSession)
 - Contraseñas encriptadas con BCrypt
+- Respuesta 401 en el cliente limpia el token y redirige a `/login`
 
 ---
 
@@ -171,22 +235,25 @@ Excepciones manejadas por `@RestControllerAdvice`:
 
 ### Redux store
 
-El estado global está dividido en 4 slices:
+El estado global está dividido en 6 slices:
 
-| Slice | Estado | Acciones |
-|-------|--------|----------|
+| Slice | Estado | Acciones principales |
+|-------|--------|----------------------|
 | `auth` | `user`, `loading`, `error` | `loginThunk`, `registerThunk`, `logout` |
 | `clientes` | `lista`, `loading`, `error` | `fetchClientes`, `addCliente` |
 | `creditos` | `lista`, `loading`, `error` | `fetchCreditosPorCliente`, `addCredito`, `clearCreditos` |
 | `cobranzas` | `lista`, `loading`, `error` | `fetchCobranzasPorCredito`, `addCobranza`, `clearCobranzas` |
+| `gestores` | `lista`, `loading`, `error` | `fetchGestores`, `addGestor`, `updateGestor`, `removeGestor` |
+| `moras` | `lista`, `loading`, `error` | `fetchMoras`, filtros por crédito/cliente/estado/gestor, `addMora`, `asignarGestorMora`, `cambiarEstadoMora`, `removeMora` |
 
-Cada operación asíncrona usa `createAsyncThunk`, que maneja automáticamente los estados `pending / fulfilled / rejected`.
+Cada operación asíncrona usa `createAsyncThunk`, manejando los estados `pending / fulfilled / rejected` con `rejectWithValue`.
 
 ### Otros conceptos del frontend
 
 - **PrivateRoute** redirige a `/login` si `state.auth.user` es null
 - **Navbar** despacha `logout()` y limpia `localStorage`
-- **apiClient.js** centraliza todas las llamadas fetch con el header `Authorization: Bearer <token>`
+- **apiClient.js** centraliza todas las llamadas fetch: agrega el header `Authorization: Bearer <token>` y maneja el código 401 limpiando la sesión y redirigiendo al login
+- **pages.css** centraliza los estilos de todas las páginas; los componentes usan `className` en lugar de estilos inline
 - El proxy de Vite redirige `/api/*` → `localhost:8080` (evita CORS en desarrollo)
 
 ### Páginas
@@ -197,6 +264,8 @@ Cada operación asíncrona usa `createAsyncThunk`, que maneja automáticamente l
 | `/clientes` | Clientes.jsx | Privado |
 | `/creditos` | Creditos.jsx | Privado |
 | `/cobranzas` | Cobranzas.jsx | Privado |
+| `/gestores` | Gestores.jsx | Privado |
+| `/moras` | Moras.jsx | Privado |
 
 ---
 

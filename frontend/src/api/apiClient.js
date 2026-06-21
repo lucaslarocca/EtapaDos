@@ -7,6 +7,12 @@ async function request(path, options = {}) {
 
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
 
+  if (res.status === 401) {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+    return;
+  }
+
   if (!res.ok) {
     const error = await res.json().catch(() => ({ mensajes: [res.statusText] }));
     throw new Error(error.mensajes?.[0] ?? 'Error desconocido');

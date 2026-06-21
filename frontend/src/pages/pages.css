@@ -1,0 +1,239 @@
+/* ─── Auth pages (Login / Register) ──────────────────────────────── */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f4f8;
+}
+.auth-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 360px;
+}
+.auth-title {
+  margin-bottom: 24px;
+  color: #1e3a5f;
+  text-align: center;
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+.form-label {
+  display: block;
+  margin-bottom: 4px;
+  color: #555;
+  font-size: 0.9rem;
+}
+.input-auth {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.btn-auth {
+  width: 100%;
+  padding: 12px;
+  background-color: #1e3a5f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ─── Páginas internas — layout ───────────────────────────────────── */
+.page      { padding: 32px; margin: 0 auto; }
+.page-sm   { max-width: 800px; }
+.page-md   { max-width: 900px; }
+.page-lg   { max-width: 860px; }
+.page-xl   { max-width: 1100px; }
+
+.page-title {
+  color: #1e3a5f;
+  margin-bottom: 24px;
+}
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  margin-bottom: 24px;
+}
+
+/* ─── Formularios ─────────────────────────────────────────────────── */
+.form-row  { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.span-2    { grid-column: span 2; }
+
+.input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.input-flex {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  flex: 1;
+  min-width: 140px;
+}
+.input-small {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 120px;
+}
+.input-small-wide { min-width: 220px; }
+.select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+}
+.select-small {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* ─── Botones ─────────────────────────────────────────────────────── */
+.btn {
+  padding: 10px 20px;
+  background-color: #1e3a5f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.btn-secondary {
+  padding: 10px 20px;
+  background-color: #9e9e9e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-edit {
+  padding: 6px 14px;
+  background-color: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 0.85rem;
+}
+.btn-delete {
+  padding: 6px 14px;
+  background-color: #c62828;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.btn-confirm {
+  padding: 7px 14px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-cancel {
+  padding: 7px 14px;
+  background-color: #9e9e9e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-action {
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.btn-action-blue   { background-color: #1565c0; }
+.btn-action-purple { background-color: #6a1b9a; }
+.btn-action-red    { background-color: #c62828; }
+
+/* ─── Feedback ────────────────────────────────────────────────────── */
+.error-box {
+  background: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+.empty { color: #999; }
+
+/* ─── Tabla ───────────────────────────────────────────────────────── */
+.table { width: 100%; border-collapse: collapse; }
+.th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid #e0e0e0;
+  color: #1e3a5f;
+  white-space: nowrap;
+}
+.td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+.td-expanded {
+  padding: 0;
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #e0e0e0;
+}
+.row-editing { background-color: #e3f2fd; }
+
+/* ─── Créditos ────────────────────────────────────────────────────── */
+.credito-box {
+  border-left: 4px solid #1e3a5f;
+  padding-left: 16px;
+  margin-bottom: 20px;
+}
+.cuota-pagada    { color: #2e7d32; }
+.cuota-pendiente { color: #c62828; }
+
+/* ─── Moras ───────────────────────────────────────────────────────── */
+.actions     { display: flex; gap: 6px; flex-wrap: wrap; }
+.form-inline {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+}
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.badge-pendiente    { background-color: #fff3e0; color: #e65100; }
+.badge-en-gestion   { background-color: #e3f2fd; color: #1565c0; }
+.badge-regularizada { background-color: #e8f5e9; color: #2e7d32; }
+.badge-incobrable   { background-color: #ffebee; color: #c62828; }
+.text-dni   { color: #9e9e9e; }
+.sin-gestor { color: #bdbdbd; font-style: italic; }
